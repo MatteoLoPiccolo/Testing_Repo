@@ -9,11 +9,20 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
+    private GameObject _tripleShotPrefab;
+    [SerializeField]
+    private GameObject _shieldVisualizer;
+    [SerializeField]
     private float _fireRate = 0.5f;
+    [SerializeField]
+    private int _lives = 3;
 
     private SpawnManager _spawnManager;
+    private bool _isTripleShotIsActive;
+    private bool _isPowerBoostIsActive;
+    private bool _isShieldIsActive;
+    private float _speedMultiplier = 2;
     private float _canFire = -1;
-    private int _lives = 3;
 
 
     // Start is called before the first frame update
@@ -41,7 +50,11 @@ public class Player : MonoBehaviour
     public void FireLaser()
     {
         _canFire = Time.time + _fireRate;
-        Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+
+        if (_isTripleShotIsActive == true)
+            Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+        else
+            Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
     }
 
     private void CalculateMovement()
@@ -50,6 +63,7 @@ public class Player : MonoBehaviour
         float verticalInput = Input.GetAxis("Vertical");
 
         Vector3 direction = new Vector3(horizonatalInput, verticalInput, 0);
+
         transform.Translate(direction * _speed * Time.deltaTime);
 
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), transform.position.z);
@@ -62,6 +76,13 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        if (_isShieldIsActive == true)
+        {
+            _isShieldIsActive = false;
+            _shieldVisualizer.SetActive(false);
+            return;
+        }
+
         _lives--;
 
         if (_lives < 1)
@@ -69,5 +90,37 @@ public class Player : MonoBehaviour
             _spawnManager.OnPlayerDeath();
             Destroy(gameObject);
         }
+    }
+
+    public void TripleShotActive()
+    {
+        _isTripleShotIsActive = true;
+        StartCoroutine(TripleShotPowerDownRoutine());
+    }
+
+    public void SpeedBoostActive()
+    {
+        _isPowerBoostIsActive = true;
+        _speed *= _speedMultiplier;
+        StartCoroutine(SpeedBoostPowerDownRoutine());
+    }
+
+    public void ShieldIsActive()
+    {
+        _isShieldIsActive = true;
+        _shieldVisualizer.SetActive(true);
+    }
+
+    IEnumerator TripleShotPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _isTripleShotIsActive = false;
+    }
+
+    IEnumerator SpeedBoostPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _isPowerBoostIsActive = false;
+        _speed /= _speedMultiplier;
     }
 }
