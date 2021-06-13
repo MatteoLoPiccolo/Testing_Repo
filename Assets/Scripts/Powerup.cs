@@ -8,6 +8,18 @@ public class Powerup : MonoBehaviour
     private float _speed = 3.0f;
     [SerializeField]
     private int _powerupId;
+    [SerializeField]
+    private AudioClip _pickUpClip;
+
+    private Camera _cam;
+
+    private void Start()
+    {
+        _cam = GameObject.Find("Main Camera").GetComponent<Camera>();
+
+        if (_cam == null)
+            Debug.LogError("The Main Camera is NULL!");
+    }
 
     // Update is called once per frame
     void Update()
@@ -22,6 +34,7 @@ public class Powerup : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            AudioSource.PlayClipAtPoint(_pickUpClip, _cam.transform.position, 0.5f);
             var player = other.transform.GetComponent<Player>();
 
             if (player != null)
