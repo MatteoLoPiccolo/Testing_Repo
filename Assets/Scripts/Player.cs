@@ -13,6 +13,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _shieldVisualizer;
     [SerializeField]
+    private GameObject _rightEngine;
+    [SerializeField]
+    private GameObject _leftEngine;
+    [SerializeField]
     private float _fireRate = 0.5f;
     [SerializeField]
     private int _lives = 3;
@@ -31,6 +35,9 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _rightEngine.SetActive(false);
+        _leftEngine.SetActive(false);
+
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
@@ -91,6 +98,19 @@ public class Player : MonoBehaviour
         }
 
         _lives--;
+
+        switch (_lives)
+        {
+            case 2:
+                _rightEngine.SetActive(true);
+                break;
+            case 1:
+                _leftEngine.SetActive(true);
+                break;
+            default:
+                break;
+        }
+
         _uIManager.UpdateLives(_lives);
 
         if (_lives < 1)
