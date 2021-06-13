@@ -24,16 +24,20 @@ public class Player : MonoBehaviour
     private int _lives = 3;
     [SerializeField]
     private int _score;
+    [SerializeField]
+    private float _acceleration = 10f;
+    [SerializeField]
+    private float _maxSpeed = 15f;
+    [SerializeField]
+    private float _startingSpeed = 3.5f;
 
     private AudioSource _audioSource;
     private UIManager _uIManager;
     private SpawnManager _spawnManager;
     private bool _isTripleShotIsActive;
-    private bool _isPowerBoostIsActive;
     private bool _isShieldIsActive;
     private float _speedMultiplier = 2;
     private float _canFire = -1;
-
 
     // Start is called before the first frame update
     void Start()
@@ -89,6 +93,12 @@ public class Player : MonoBehaviour
 
         Vector3 direction = new Vector3(horizonatalInput, verticalInput, 0);
 
+        if (Input.GetKey(KeyCode.LeftShift) && _speed <= _maxSpeed)
+            _speed += (_acceleration * Time.deltaTime);
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+            _speed = _startingSpeed;
+
+
         transform.Translate(direction * _speed * Time.deltaTime);
 
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), transform.position.z);
@@ -139,7 +149,6 @@ public class Player : MonoBehaviour
 
     public void SpeedBoostActive()
     {
-        _isPowerBoostIsActive = true;
         _speed *= _speedMultiplier;
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
@@ -159,7 +168,6 @@ public class Player : MonoBehaviour
     IEnumerator SpeedBoostPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
-        _isPowerBoostIsActive = false;
         _speed /= _speedMultiplier;
     }
 
