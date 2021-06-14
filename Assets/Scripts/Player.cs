@@ -28,7 +28,11 @@ public class Player : MonoBehaviour
     private float _acceleration = 10f;
     [SerializeField]
     private float _maxSpeed = 15f;
-    
+    [SerializeField]
+    private int _ammoCount = 15;
+
+    public int _currentAmmo;
+
 
     private AudioSource _audioSource;
     private UIManager _uIManager;
@@ -64,6 +68,7 @@ public class Player : MonoBehaviour
 
         transform.position = Vector3.zero;
         _speed = _startingSpeed;
+        _currentAmmo = _ammoCount;
     }
 
     // Update is called once per frame
@@ -81,12 +86,20 @@ public class Player : MonoBehaviour
     {
         _canFire = Time.time + _fireRate;
 
-        if (_isTripleShotIsActive)
-            Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
-        else
-            Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+        if (_currentAmmo >= 1)
+        {
+            _currentAmmo--;
+            _uIManager.UpdateAmmoCount(_currentAmmo);
 
-        _audioSource.Play();
+            if (_isTripleShotIsActive)
+                Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+            else
+                Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+
+            _audioSource.Play();
+        }
+        else
+            _currentAmmo = 0;
     }
 
     private void Movement()
