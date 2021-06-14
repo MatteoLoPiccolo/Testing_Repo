@@ -12,13 +12,18 @@ public class Powerup : MonoBehaviour
     private AudioClip _pickUpClip;
 
     private Camera _cam;
+    private Player _player;
 
     private void Start()
     {
         _cam = GameObject.Find("Main Camera").GetComponent<Camera>();
+        _player = GameObject.Find("Player").GetComponent<Player>();
 
         if (_cam == null)
             Debug.LogError("The Main Camera is NULL!");
+
+        if (_player == null)
+            Debug.LogError("Player is NULL!");
     }
 
     // Update is called once per frame
@@ -34,27 +39,25 @@ public class Powerup : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            AudioSource.PlayClipAtPoint(_pickUpClip, _cam.transform.position, 0.5f);
-            var player = other.transform.GetComponent<Player>();
-
-            if (player != null)
+            if (_player != null)
             {
                 switch (_powerupId)
                 {
                     case 0:
-                        player.TripleShotActive();
+                        _player.TripleShotActive();
                         break;
                     case 1:
-                        player.SpeedBoostActive();
+                        _player.SpeedBoostActive();
                         break;
                     case 2:
-                        player.ShieldIsActive();
+                        _player.ShieldIsActive();
                         break;
                     default:
                         break;
                 }
             }
 
+            AudioSource.PlayClipAtPoint(_pickUpClip, _cam.transform.position);
             Destroy(gameObject);
         }
     }

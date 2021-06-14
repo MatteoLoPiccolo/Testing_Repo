@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 3.5f;
+    private float _speed = 4.5f;
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
@@ -28,16 +28,18 @@ public class Player : MonoBehaviour
     private float _acceleration = 10f;
     [SerializeField]
     private float _maxSpeed = 15f;
-    [SerializeField]
-    private float _startingSpeed = 3.5f;
+    
 
     private AudioSource _audioSource;
     private UIManager _uIManager;
     private SpawnManager _spawnManager;
+    private float _startingSpeed = 4.5f;
     private bool _isTripleShotIsActive;
     private bool _isShieldIsActive;
     private float _speedMultiplier = 2;
     private float _canFire = -1;
+    private int _shieldLives = 3;
+
 
     // Start is called before the first frame update
     void Start()
@@ -61,12 +63,13 @@ public class Player : MonoBehaviour
             _audioSource.clip = _laserClip;
 
         transform.position = Vector3.zero;
+        _speed = _startingSpeed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        CalculateMovement();
+        Movement();
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
@@ -78,12 +81,19 @@ public class Player : MonoBehaviour
     {
         _canFire = Time.time + _fireRate;
 
-        if (_isTripleShotIsActive == true)
+        if (_isTripleShotIsActive)
             Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
         else
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
 
         _audioSource.Play();
+    }
+
+    private void Movement()
+    {
+        CalculateMovement();
+        Thruster();
+        Bounderies();
     }
 
     private void CalculateMovement()
@@ -92,33 +102,60 @@ public class Player : MonoBehaviour
         float verticalInput = Input.GetAxis("Vertical");
 
         Vector3 direction = new Vector3(horizonatalInput, verticalInput, 0);
+        transform.Translate(direction * _speed * Time.deltaTime);
+    }
 
+
+    private void Bounderies()
+    {
+        var screenXWrap = 11.5f;
+        var lowYPos = -3.8f;
+
+        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, lowYPos, 0), transform.position.z);
+
+        if (transform.position.x >= screenXWrap)
+            transform.position = new Vector3(-screenXWrap, transform.position.y, transform.position.z);
+        else if (transform.position.x <= -screenXWrap)
+            transform.position = new Vector3(screenXWrap, transform.position.y, transform.position.z);
+    }
+
+    private void Thruster()
+    {
         if (Input.GetKey(KeyCode.LeftShift) && _speed <= _maxSpeed)
             _speed += (_acceleration * Time.deltaTime);
         else if (Input.GetKeyUp(KeyCode.LeftShift))
             _speed = _startingSpeed;
-
-
-        transform.Translate(direction * _speed * Time.deltaTime);
-
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), transform.position.z);
-
-        if (transform.position.x >= 11.5f)
-            transform.position = new Vector3(-11.5f, transform.position.y, transform.position.z);
-        else if (transform.position.x <= -11.5f)
-            transform.position = new Vector3(11.5f, transform.position.y, transform.position.z);
     }
 
     public void Damage()
     {
-        if (_isShieldIsActive == true)
+        if (_isShieldIsActive)
         {
-            _isShieldIsActive = false;
-            _shieldVisualizer.SetActive(false);
+            _shieldLives--;
+            var shieldColor = _shieldVisualizer.GetComponent<SpriteRenderer>();
+
+            switch (_shieldLives)
+            {
+                case 2:
+                    shieldColor.color = Color.green;
+                    break;
+                case 1:
+                    shieldColor.color = Color.red;
+                    break;
+                case 0:
+                    _isShieldIsActive = false;
+                    _shieldVisualizer.SetActive(false);
+                    shieldColor.color = new Color(1, 1, 1, 1);
+                    break;
+                default:
+                    break;
+            }
+
             return;
         }
 
         _lives--;
+        _uIManager.UpdateLives(_lives);
 
         switch (_lives)
         {
@@ -131,8 +168,6 @@ public class Player : MonoBehaviour
             default:
                 break;
         }
-
-        _uIManager.UpdateLives(_lives);
 
         if (_lives < 1)
         {
@@ -155,6 +190,9 @@ public class Player : MonoBehaviour
 
     public void ShieldIsActive()
     {
+        if (!_isShieldIsActive)
+            _shieldLives = 3;
+
         _isShieldIsActive = true;
         _shieldVisualizer.SetActive(true);
     }
@@ -168,7 +206,7 @@ public class Player : MonoBehaviour
     IEnumerator SpeedBoostPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
-        _speed /= _speedMultiplier;
+        _speed = _startingSpeed;
     }
 
     public void AddScore(int points)
