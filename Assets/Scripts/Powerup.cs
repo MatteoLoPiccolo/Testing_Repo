@@ -14,6 +14,7 @@ public class Powerup : MonoBehaviour
     private Camera _cam;
     private Player _player;
     private int _addingAmmoLaser;
+    private int _addLivePowerup = 1;
 
     private void Start()
     {
@@ -58,6 +59,9 @@ public class Powerup : MonoBehaviour
                     case 3:
                         _addingAmmoLaser = Random.Range(6, 10);
                         _player.AddAmmo(_addingAmmoLaser);
+                        break;
+                    case 4:
+                        _player.AddLives(_addLivePowerup);
                         break;
                     default:
                         break;

@@ -48,8 +48,8 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _rightEngine.SetActive(false);
-        _leftEngine.SetActive(false);
+        //_rightEngine.SetActive(false);
+        //_leftEngine.SetActive(false);
 
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
@@ -169,23 +169,32 @@ public class Player : MonoBehaviour
 
         _lives--;
         _uIManager.UpdateLives(_lives);
+        EngineDamageVisualize();
 
+        if (_lives < 1)
+        {
+            _spawnManager.OnPlayerDeath();
+            Destroy(gameObject);
+        }
+    }
+
+    private void EngineDamageVisualize()
+    {
         switch (_lives)
         {
+            case 3:
+                _rightEngine.SetActive(false);
+                _leftEngine.SetActive(false);
+                break;
             case 2:
                 _rightEngine.SetActive(true);
+                _leftEngine.SetActive(false);
                 break;
             case 1:
                 _leftEngine.SetActive(true);
                 break;
             default:
                 break;
-        }
-
-        if (_lives < 1)
-        {
-            _spawnManager.OnPlayerDeath();
-            Destroy(gameObject);
         }
     }
 
@@ -230,6 +239,17 @@ public class Player : MonoBehaviour
             _currentAmmo = _ammoCount;
         
         _uIManager.UpdateAmmoCount(_currentAmmo);
+    }
+
+    public void AddLives(int live)
+    {
+        if (_lives == 3)
+            return;
+
+        _lives += live;
+
+        EngineDamageVisualize();
+        _uIManager.UpdateLives(_lives);
     }
 
     public void AddScore(int points)
