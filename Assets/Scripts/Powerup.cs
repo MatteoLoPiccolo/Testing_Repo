@@ -13,6 +13,7 @@ public class Powerup : MonoBehaviour
 
     private Camera _cam;
     private Player _player;
+    private int _addingAmmoLaser;
 
     private void Start()
     {
@@ -24,6 +25,8 @@ public class Powerup : MonoBehaviour
 
         if (_player == null)
             Debug.LogError("Player is NULL!");
+
+        
     }
 
     // Update is called once per frame
@@ -51,6 +54,10 @@ public class Powerup : MonoBehaviour
                         break;
                     case 2:
                         _player.ShieldIsActive();
+                        break;
+                    case 3:
+                        _addingAmmoLaser = Random.Range(6, 10);
+                        _player.AddAmmo(_addingAmmoLaser);
                         break;
                     default:
                         break;

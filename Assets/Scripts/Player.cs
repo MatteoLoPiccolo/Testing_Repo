@@ -222,6 +222,16 @@ public class Player : MonoBehaviour
         _speed = _startingSpeed;
     }
 
+    public void AddAmmo(int ammo)
+    {
+        _currentAmmo += ammo;
+
+        if (_currentAmmo > _ammoCount)
+            _currentAmmo = _ammoCount;
+        
+        _uIManager.UpdateAmmoCount(_currentAmmo);
+    }
+
     public void AddScore(int points)
     {
         _score += points;
