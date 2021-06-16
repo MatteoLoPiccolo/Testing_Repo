@@ -63,6 +63,9 @@ public class Powerup : MonoBehaviour
                     case 4:
                         _player.AddLives(_addLivePowerup);
                         break;
+                    case 5:
+                        _player.CannonActive();
+                        break;
                     default:
                         break;
                 }

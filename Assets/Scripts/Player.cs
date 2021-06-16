@@ -7,9 +7,13 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 4.5f;
     [SerializeField]
+    private Enemy _enemy;
+    [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
     private GameObject _tripleShotPrefab;
+    [SerializeField]
+    private GameObject _cannonPrefab;
     [SerializeField]
     private GameObject _shieldVisualizer;
     [SerializeField]
@@ -38,8 +42,9 @@ public class Player : MonoBehaviour
     private UIManager _uIManager;
     private SpawnManager _spawnManager;
     private float _startingSpeed = 4.5f;
-    private bool _isTripleShotIsActive;
-    private bool _isShieldIsActive;
+    private bool _isTripleShotActive;
+    private bool _isShieldActive;
+    public bool _isCannonActive;
     private float _speedMultiplier = 2;
     private float _canFire = -1;
     private int _shieldLives = 3;
@@ -48,6 +53,8 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _cannonPrefab.SetActive(false);
+
         //_rightEngine.SetActive(false);
         //_leftEngine.SetActive(false);
 
@@ -91,8 +98,12 @@ public class Player : MonoBehaviour
             _currentAmmo--;
             _uIManager.UpdateAmmoCount(_currentAmmo);
 
-            if (_isTripleShotIsActive)
+            if (_isTripleShotActive)
                 Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+            if (_isCannonActive)
+            {
+                _cannonPrefab.SetActive(true);
+            }
             else
                 Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
 
@@ -118,7 +129,6 @@ public class Player : MonoBehaviour
         transform.Translate(direction * _speed * Time.deltaTime);
     }
 
-
     private void Bounderies()
     {
         var screenXWrap = 11.5f;
@@ -142,7 +152,7 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        if (_isShieldIsActive)
+        if (_isShieldActive)
         {
             _shieldLives--;
             var shieldColor = _shieldVisualizer.GetComponent<SpriteRenderer>();
@@ -156,7 +166,7 @@ public class Player : MonoBehaviour
                     shieldColor.color = Color.red;
                     break;
                 case 0:
-                    _isShieldIsActive = false;
+                    _isShieldActive = false;
                     _shieldVisualizer.SetActive(false);
                     shieldColor.color = new Color(1, 1, 1, 1);
                     break;
@@ -169,7 +179,7 @@ public class Player : MonoBehaviour
 
         _lives--;
         _uIManager.UpdateLives(_lives);
-        EngineDamageVisualize();
+        EngineDamageVisualization();
 
         if (_lives < 1)
         {
@@ -178,7 +188,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void EngineDamageVisualize()
+    private void EngineDamageVisualization()
     {
         switch (_lives)
         {
@@ -200,8 +210,14 @@ public class Player : MonoBehaviour
 
     public void TripleShotActive()
     {
-        _isTripleShotIsActive = true;
+        _isTripleShotActive = true;
         StartCoroutine(TripleShotPowerDownRoutine());
+    }
+
+    public void CannonActive()
+    {
+        _isCannonActive = true;
+        StartCoroutine(CannonPowerDownRoutine());
     }
 
     public void SpeedBoostActive()
@@ -212,23 +228,30 @@ public class Player : MonoBehaviour
 
     public void ShieldIsActive()
     {
-        if (!_isShieldIsActive)
+        if (!_isShieldActive)
             _shieldLives = 3;
 
-        _isShieldIsActive = true;
+        _isShieldActive = true;
         _shieldVisualizer.SetActive(true);
     }
 
     IEnumerator TripleShotPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
-        _isTripleShotIsActive = false;
+        _isTripleShotActive = false;
     }
 
     IEnumerator SpeedBoostPowerDownRoutine()
     {
         yield return new WaitForSeconds(5.0f);
         _speed = _startingSpeed;
+    }
+
+    IEnumerator CannonPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _cannonPrefab.SetActive(false);
+        _isCannonActive = false;
     }
 
     public void AddAmmo(int ammo)
@@ -248,7 +271,7 @@ public class Player : MonoBehaviour
 
         _lives += live;
 
-        EngineDamageVisualize();
+        EngineDamageVisualization();
         _uIManager.UpdateLives(_lives);
     }
 
