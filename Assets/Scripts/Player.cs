@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -35,19 +36,19 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _ammoCount = 15;
 
-    public int _currentAmmo;
-
-
     private AudioSource _audioSource;
     private UIManager _uIManager;
     private SpawnManager _spawnManager;
+    private ThrusterHud _thrusterHud;
     private float _startingSpeed = 4.5f;
     private bool _isTripleShotActive;
     private bool _isShieldActive;
-    public bool _isCannonActive;
+    private bool _isCannonActive;
+    private bool _isThrusterActive;
     private float _speedMultiplier = 2;
     private float _canFire = -1;
     private int _shieldLives = 3;
+    private int _currentAmmo;
 
 
     // Start is called before the first frame update
@@ -59,6 +60,7 @@ public class Player : MonoBehaviour
         //_leftEngine.SetActive(false);
 
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _thrusterHud = GameObject.Find("Canvas").GetComponentInChildren<ThrusterHud>();
         _uIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
 
@@ -67,6 +69,9 @@ public class Player : MonoBehaviour
 
         if (_spawnManager == null)
             Debug.LogError("The UI Manager is NULL");
+
+        if (_thrusterHud == null)
+            Debug.LogError("The Thruster HUD is NULL");
 
         if (_audioSource == null)
             Debug.LogError("The Audiosource is NULL");
@@ -144,10 +149,28 @@ public class Player : MonoBehaviour
 
     private void Thruster()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && _speed <= _maxSpeed)
+        if (Input.GetKey(KeyCode.LeftShift) && _speed < _maxSpeed)
+        {
+            _isThrusterActive = true;
             _speed += (_acceleration * Time.deltaTime);
+        }
         else if (Input.GetKeyUp(KeyCode.LeftShift))
-            _speed = _startingSpeed;
+        {
+            _isThrusterActive = false;
+        }
+
+        if (_isThrusterActive == false)
+        {
+            if (_speed <= _startingSpeed)
+            {
+                _speed = _startingSpeed;
+                return;
+            }
+
+            _speed -= (_acceleration * Time.deltaTime);
+        }
+
+        _thrusterHud.SetThrusterSliderValue(_speed);
     }
 
     public void Damage()
