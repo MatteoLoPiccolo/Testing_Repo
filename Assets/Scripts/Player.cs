@@ -24,6 +24,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private AudioClip _laserClip;
     [SerializeField]
+    private CameraShake _cam;
+    [SerializeField]
     private float _fireRate = 0.5f;
     [SerializeField]
     private int _lives = 3;
@@ -62,6 +64,7 @@ public class Player : MonoBehaviour
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _thrusterHud = GameObject.Find("Canvas").GetComponentInChildren<ThrusterHud>();
         _uIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _cam = GameObject.Find("Main Camera").GetComponent<CameraShake>();
         _audioSource = GetComponent<AudioSource>();
 
         if (_uIManager == null)
@@ -203,6 +206,7 @@ public class Player : MonoBehaviour
         _lives--;
         _uIManager.UpdateLives(_lives);
         EngineDamageVisualization();
+        _cam.CamPlayerDamage();
 
         if (_lives < 1)
         {
