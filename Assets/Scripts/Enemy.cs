@@ -96,5 +96,17 @@ public class Enemy : MonoBehaviour
             _collider2D.enabled = false;
             Destroy(gameObject, 2.8f);
         }
+
+        if (other.tag == "Cannon")
+        {
+            if (_player != null)
+                _player.AddScore(_points);
+
+            _anim.SetTrigger("OnEnemyDeath");
+            _speed = 0;
+            _audiosource.Play();
+            _collider2D.enabled = false;
+            Destroy(gameObject, 2.8f);
+        }
     }
 }

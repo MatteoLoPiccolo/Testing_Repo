@@ -7,6 +7,9 @@ TagManager:
   - Laser
   - Enemy
   - Powerup
+  - EnemyLaser
+  - Shield
+  - Cannon
   layers:
   - Default
   - TransparentFX
