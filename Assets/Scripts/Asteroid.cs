@@ -10,20 +10,15 @@ public class Asteroid : MonoBehaviour
     private AudioClip _explosionClip;
 
     private Animator _anim;
-    private SpawnManager _spawnManager;
     private CircleCollider2D _circleCollider2;
     private AudioSource _audioSource;
 
     // Start is called before the first frame update
     void Start()
     {
-        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _circleCollider2 = GetComponent<CircleCollider2D>();
         _anim = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
-
-        if (_spawnManager == null)
-            Debug.LogError("Spawn Manager is NULL!");
 
         if (_circleCollider2 == null)
             Debug.LogError("CircleCollider2D is NULL!");
@@ -53,7 +48,7 @@ public class Asteroid : MonoBehaviour
             _circleCollider2.enabled = false;
             _anim.SetTrigger("OnAsteroidDeath");
             _audioSource.Play();
-            _spawnManager.StartSpawning();
+            SpawnManager.Instance.StartSpawning();
             Destroy(gameObject, 2.8f);
         }
     }

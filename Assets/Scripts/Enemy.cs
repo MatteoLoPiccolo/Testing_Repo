@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     private Collider2D _collider2D;
     private float _fireRate = 3.0f;
     private float _canFire = -1;
+    private bool _enemyFire = true;
 
     private void Start()
     {
@@ -47,7 +48,7 @@ public class Enemy : MonoBehaviour
     {
         CalculateMovement();
 
-        if (Time.time > _canFire)
+        if (Time.time > _canFire && _enemyFire)
         {
             _fireRate = Random.Range(3.0f, 7.0f);
             _canFire = Time.time + _fireRate;
@@ -76,6 +77,7 @@ public class Enemy : MonoBehaviour
             if (_player != null)
                 _player.Damage();
 
+            _enemyFire = false;
             _anim.SetTrigger("OnEnemyDeath");
             _audiosource.Play();
             _speed = 0;
@@ -90,9 +92,12 @@ public class Enemy : MonoBehaviour
             if (_player != null)
                 _player.AddScore(_points);
 
+            _enemyFire = false;
             _anim.SetTrigger("OnEnemyDeath");
-            _speed = 0;
+            _fireRate = 100;
             _audiosource.Play();
+            AudioSource.PlayClipAtPoint(_explosionClip, transform.position + new Vector3(0, 0, -10));
+            _speed = 0;
             _collider2D.enabled = false;
             Destroy(gameObject, 2.8f);
         }
@@ -102,6 +107,7 @@ public class Enemy : MonoBehaviour
             if (_player != null)
                 _player.AddScore(_points);
 
+            _enemyFire = false;
             _anim.SetTrigger("OnEnemyDeath");
             _speed = 0;
             _audiosource.Play();

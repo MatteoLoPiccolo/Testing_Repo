@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    #region Variables
     [SerializeField]
     private Text _scoreText;
     [SerializeField]
@@ -18,16 +19,26 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Sprite[] _livesSprites;
 
-    private GameManager _gameManager;
+    private static UIManager _instance;
+    public static UIManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+                Debug.Log("UI Manager is null");
+            return _instance;
+        }
+    }
+    #endregion
+
+    private void Awake()
+    {
+        _instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
-
-        if (_gameManager == null)
-            Debug.LogError("Game Manager is NULL!");
-
         _gameOverText.gameObject.SetActive(false);
         _restartText.gameObject.SetActive(false);
         _scoreText.text = "Score: " + 0;
@@ -38,9 +49,9 @@ public class UIManager : MonoBehaviour
         _scoreText.text = "Score: " + playerScore.ToString();
     }
 
-    public void UpdateAmmoCount(int ammoCount)
+    public void UpdateAmmoCount(int ammoCount, int totalAmmo)
     {
-        _ammoCountText.text = "Ammo: " + ammoCount.ToString();
+        _ammoCountText.text = "Ammo: " + ammoCount.ToString() + " / " + totalAmmo.ToString();
     }
 
     public void UpdateLives(int currentLives)
@@ -60,7 +71,7 @@ public class UIManager : MonoBehaviour
     {
         _gameOverText.gameObject.SetActive(true);
         _restartText.gameObject.SetActive(true);
-        _gameManager.GameOver();
+        GameManager.Instance.GameOver();
         StartCoroutine(GameOverFlickerRoutine());
     }
 

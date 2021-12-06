@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 8073920146318080882}
   - component: {fileID: -7237235764917610342}
   - component: {fileID: 5928026943674424227}
-  - component: {fileID: 7702306738792248511}
+  - component: {fileID: 8567881531953846534}
   m_Layer: 0
-  m_Name: Ammo_Pack
+  m_Name: Ammo_Pack_Powerup
   m_TagString: Powerup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -159,7 +159,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &7702306738792248511
+--- !u!114 &8567881531953846534
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8073920146318080883}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d641bcc9dc2aab14f83d31e2321a85d3, type: 3}
+  m_Script: {fileID: 11500000, guid: 646b7f403cac5ab43b339265aea05327, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3

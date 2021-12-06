@@ -249,7 +249,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Ammo: 15'
+  m_Text: 'Ammo: 15 / 15'
 --- !u!222 &198831847
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -630,7 +630,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &642752752
 Animator:
   serializedVersion: 3
@@ -1708,63 +1708,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!1001 &1345548660
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5177248877637459622, guid: 74f87d29c078b06418d9614ca2ef39b5, type: 3}
-      propertyPath: m_RootOrder
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 5177248877637459622, guid: 74f87d29c078b06418d9614ca2ef39b5, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 3.0209
-      objectReference: {fileID: 0}
-    - target: {fileID: 5177248877637459622, guid: 74f87d29c078b06418d9614ca2ef39b5, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 3.820029
-      objectReference: {fileID: 0}
-    - target: {fileID: 5177248877637459622, guid: 74f87d29c078b06418d9614ca2ef39b5, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5177248877637459622, guid: 74f87d29c078b06418d9614ca2ef39b5, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5177248877637459622, guid: 74f87d29c078b06418d9614ca2ef39b5, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5177248877637459622, guid: 74f87d29c078b06418d9614ca2ef39b5, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5177248877637459622, guid: 74f87d29c078b06418d9614ca2ef39b5, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5177248877637459622, guid: 74f87d29c078b06418d9614ca2ef39b5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5177248877637459622, guid: 74f87d29c078b06418d9614ca2ef39b5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5177248877637459622, guid: 74f87d29c078b06418d9614ca2ef39b5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8186631609745420898, guid: 74f87d29c078b06418d9614ca2ef39b5, type: 3}
-      propertyPath: m_Name
-      value: Enemy
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 74f87d29c078b06418d9614ca2ef39b5, type: 3}
 --- !u!1 &1481034585
 GameObject:
   m_ObjectHideFlags: 0
@@ -1948,7 +1891,7 @@ MonoBehaviour:
   _rightEngine: {fileID: 642752751}
   _leftEngine: {fileID: 2031438191}
   _laserClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
-  _cam: {fileID: 0}
+  _emptyLaserClip: {fileID: 8300000, guid: 4cf84feb0f36e6f49aed50993e4fae13, type: 3}
   _fireRate: 0.35
   _lives: 3
   _score: 0
@@ -2164,7 +2107,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &2031438192
 SpriteRenderer:
   m_ObjectHideFlags: 0

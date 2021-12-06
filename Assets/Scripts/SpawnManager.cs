@@ -12,11 +12,20 @@ public class SpawnManager : MonoBehaviour
     private GameObject _enemyContainer;
 
     private bool _stopSpawning;
-
-    // Start is called before the first frame update
-    void Start()
+    private static SpawnManager _instance;
+    public static SpawnManager Instance
     {
+        get
+        {
+            if (_instance == null)
+                Debug.Log("Spawn Manager is null");
+            return _instance;
+        }
+    }
 
+    private void Awake()
+    {
+        _instance = this;
     }
 
     public void StartSpawning()
