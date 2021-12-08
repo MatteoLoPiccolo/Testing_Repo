@@ -22,8 +22,8 @@ public class AmmoPackPowerup : Powerup
     {
         if (other.CompareTag("Player"))
         {
-            if (base._player != null)
-                base._player.AddAmmo(_addingAmmoLaser, _player.AmmoCount);
+            if (_player != null)
+                _player.AddAmmo(_addingAmmoLaser, _player.AmmoCount);
 
             AudioSource.PlayClipAtPoint(_pickUpClip, transform.position + new Vector3(0, 0, -10));
             Destroy(gameObject);

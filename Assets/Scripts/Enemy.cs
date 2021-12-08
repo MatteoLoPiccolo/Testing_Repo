@@ -91,7 +91,6 @@ public class Enemy : MonoBehaviour
 
         if (other.tag == "Laser")
         {
-            //_laser.Hide();
             Destroy(other.gameObject);
 
             if (_player != null)
@@ -99,7 +98,6 @@ public class Enemy : MonoBehaviour
 
             _enemyFire = false;
             _anim.SetTrigger("OnEnemyDeath");
-            _fireRate = 100;
             _audiosource.Play();
             _speed = 0;
             _collider2D.enabled = false;

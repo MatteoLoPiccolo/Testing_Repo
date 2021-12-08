@@ -11,13 +11,11 @@ public class Asteroid : MonoBehaviour
     private Animator _anim;
     private CircleCollider2D _circleCollider2;
     private AudioSource _audioSource;
-    private Laser _laser;
     #endregion
 
     // Start is called before the first frame update
     void Start()
     {
-        //_laser = GameObject.Find("Laser").GetComponent<Laser>();
         _circleCollider2 = GetComponent<CircleCollider2D>();
         _anim = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();

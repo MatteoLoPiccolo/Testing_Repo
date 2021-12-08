@@ -108,8 +108,6 @@ public class Player : MonoBehaviour
             if (_isCannonActive)
                 _cannonPrefab.SetActive(true);
 
-            //GameObject laser = PoolManager.Instance.RequestLaser();
-            //laser.transform.position = transform.position + new Vector3(0, 1.05f, 0);
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
 
             _audioSource.clip = _laserClip;
@@ -288,7 +286,7 @@ public class Player : MonoBehaviour
 
     IEnumerator CannonPowerDownRoutine()
     {
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(2.0f);
         _cannonPrefab.SetActive(false);
         _isCannonActive = false;
     }
@@ -302,7 +300,6 @@ public class Player : MonoBehaviour
             _currentAmmo = _ammoCount;
 
         OnAmmoUpdate?.Invoke(_currentAmmo, AmmoCount);
-        //UIManager.Instance.UpdateAmmoCount(_currentAmmo, _ammoCount);
     }
 
     public void AddLives(int live)
@@ -314,13 +311,11 @@ public class Player : MonoBehaviour
 
         EngineDamageVisualization();
         OnLiveUpdate?.Invoke(_lives);
-        //UIManager.Instance.UpdateLives(_lives);
     }
 
     public void AddScore(int points)
     {
         _score += points;
         OnScoreUpdate?.Invoke(_score);
-        //UIManager.Instance.UpdateScore(_score);
     }
 }
