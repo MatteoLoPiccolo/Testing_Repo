@@ -1,7 +1,6 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -38,6 +37,9 @@ public class Player : MonoBehaviour
     private float _maxSpeed = 15f;
     [SerializeField]
     private int _ammoCount = 15;
+    private float _speedBoostAcceleration = 6.5f;
+
+    public int AmmoCount { get { return _ammoCount; } }
 
     private CameraShake _cam;
     private AudioSource _audioSource;
@@ -45,12 +47,18 @@ public class Player : MonoBehaviour
     private float _startingSpeed = 4.5f;
     private bool _isTripleShotActive;
     private bool _isShieldActive;
+    private bool _isSpeedBoostActive;
     private bool _isCannonActive;
     private bool _isThrusterActive;
-    private float _speedMultiplier = 2;
     private float _canFire = -1;
     private int _shieldLives = 3;
     private int _currentAmmo;
+    #endregion
+
+    #region Events
+    public static event Action<int> OnScoreUpdate;
+    public static Action<int, int> OnAmmoUpdate;
+    public static Action<int> OnLiveUpdate;
     #endregion
 
     // Start is called before the first frame update
@@ -98,7 +106,7 @@ public class Player : MonoBehaviour
                 Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
             if (_isCannonActive)
                 _cannonPrefab.SetActive(true);
-            
+
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
 
             _audioSource.clip = _laserClip;
@@ -144,7 +152,7 @@ public class Player : MonoBehaviour
 
     private void Thruster()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && _speed <= _maxSpeed)
+        if (Input.GetKey(KeyCode.LeftShift) && _speed <= _maxSpeed && !_isSpeedBoostActive)
         {
             _isThrusterActive = true;
             _speed += (_acceleration * Time.deltaTime);
@@ -159,7 +167,7 @@ public class Player : MonoBehaviour
             _speed -= (_acceleration * Time.deltaTime);
         }
 
-        if (_isThrusterActive == false)
+        if (_isThrusterActive == false && !_isSpeedBoostActive)
         {
             if (_speed <= _startingSpeed)
             {
@@ -232,18 +240,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void ThrusterIsActive()
-    {
-        _isThrusterActive = true;
-        StartCoroutine(ThrusterPowerDownRoutine());
-    }
-
-    IEnumerator ThrusterPowerDownRoutine()
-    {
-        yield return new WaitForSeconds(3.0f);
-        _isThrusterActive = false;
-    }
-
     public void TripleShotActive()
     {
         _isTripleShotActive = true;
@@ -258,7 +254,9 @@ public class Player : MonoBehaviour
 
     public void SpeedBoostActive()
     {
-        _speed *= _speedMultiplier;
+        _isSpeedBoostActive = true;
+        _speed += _speedBoostAcceleration;
+        _thrusterHud.SetThrusterSliderValue(_speed);
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
 
@@ -279,8 +277,10 @@ public class Player : MonoBehaviour
 
     IEnumerator SpeedBoostPowerDownRoutine()
     {
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(3.0f);
+        _isSpeedBoostActive = false;
         _speed = _startingSpeed;
+        _thrusterHud.SetThrusterSliderValue(_speed);
     }
 
     IEnumerator CannonPowerDownRoutine()
@@ -290,14 +290,16 @@ public class Player : MonoBehaviour
         _isCannonActive = false;
     }
 
-    public void AddAmmo(int ammo)
+    public void AddAmmo(int ammo, int totalAmmo)
     {
+        _ammoCount = totalAmmo;
         _currentAmmo += ammo;
 
         if (_currentAmmo > _ammoCount)
             _currentAmmo = _ammoCount;
-        
-        UIManager.Instance.UpdateAmmoCount(_currentAmmo, _ammoCount);
+
+        OnAmmoUpdate?.Invoke(_currentAmmo, AmmoCount);
+        //UIManager.Instance.UpdateAmmoCount(_currentAmmo, _ammoCount);
     }
 
     public void AddLives(int live)
@@ -308,12 +310,14 @@ public class Player : MonoBehaviour
         _lives += live;
 
         EngineDamageVisualization();
-        UIManager.Instance.UpdateLives(_lives);
+        OnLiveUpdate?.Invoke(_lives);
+        //UIManager.Instance.UpdateLives(_lives);
     }
 
     public void AddScore(int points)
     {
         _score += points;
-        UIManager.Instance.UpdateScore(_score);
+        OnScoreUpdate?.Invoke(_score);
+        //UIManager.Instance.UpdateScore(_score);
     }
 }

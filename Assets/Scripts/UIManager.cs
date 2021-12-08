@@ -1,5 +1,5 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +18,8 @@ public class UIManager : MonoBehaviour
     private Image _livesImg;
     [SerializeField]
     private Sprite[] _livesSprites;
+
+    
 
     private static UIManager _instance;
     public static UIManager Instance
@@ -62,9 +64,7 @@ public class UIManager : MonoBehaviour
         _livesImg.sprite = _livesSprites[currentLives];
 
         if (currentLives == 0)
-        {
             GameOverSequence();
-        }
     }
 
     private void GameOverSequence()
@@ -84,5 +84,19 @@ public class UIManager : MonoBehaviour
             _gameOverText.text = "";
             yield return new WaitForSeconds(0.5f);
         }
+    }
+
+    private void OnEnable()
+    {
+        Player.OnScoreUpdate += UpdateScore;
+        Player.OnLiveUpdate += UpdateLives;
+        Player.OnAmmoUpdate += UpdateAmmoCount;
+    }
+
+    private void OnDisable()
+    {
+        Player.OnScoreUpdate -= UpdateScore;
+        Player.OnLiveUpdate -= UpdateLives;
+        Player.OnAmmoUpdate -= UpdateAmmoCount;
     }
 }

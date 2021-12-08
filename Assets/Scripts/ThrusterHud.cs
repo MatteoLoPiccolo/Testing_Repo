@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ThrusterHud : MonoBehaviour
 {
+    #region Variables
     private Slider _thrusterSlider;
+    #endregion
 
     private void Start()
     {

@@ -1,9 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    #region Variables
     [SerializeField]
     private GameObject _enemyPrefab;
     [SerializeField]
@@ -22,6 +22,7 @@ public class SpawnManager : MonoBehaviour
             return _instance;
         }
     }
+    #endregion
 
     private void Awake()
     {

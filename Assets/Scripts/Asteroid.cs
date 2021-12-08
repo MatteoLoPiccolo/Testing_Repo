@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Asteroid : MonoBehaviour
 {
+    #region Variables
     [SerializeField]
     private float _speedRotation = 15f;
     [SerializeField]
@@ -12,6 +11,7 @@ public class Asteroid : MonoBehaviour
     private Animator _anim;
     private CircleCollider2D _circleCollider2;
     private AudioSource _audioSource;
+    #endregion
 
     // Start is called before the first frame update
     void Start()

@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    #region Variables
     [SerializeField]
     private float _speed = 3.5f;
     [SerializeField]
@@ -20,6 +19,7 @@ public class Enemy : MonoBehaviour
     private float _fireRate = 3.0f;
     private float _canFire = -1;
     private bool _enemyFire = true;
+    #endregion
 
     private void Start()
     {

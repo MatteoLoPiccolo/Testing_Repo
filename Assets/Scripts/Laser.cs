@@ -1,13 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
+    #region Variables
     [SerializeField]
     private float _speed = 3.5f;
 
     private bool _isEnemyLaser;
+    #endregion
 
     // Update is called once per frame
     void Update()
@@ -16,7 +16,6 @@ public class Laser : MonoBehaviour
             MoveUp();
         else
             MoveDown();
-        
     }
 
     private void MoveUp()

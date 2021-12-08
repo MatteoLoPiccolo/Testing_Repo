@@ -1,9 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
+    #region Variables
     [SerializeField]
     private float shakeAmount = 0.3f;
     [SerializeField]
@@ -12,6 +12,7 @@ public class CameraShake : MonoBehaviour
     private Transform _camTransform;
     private Vector3 _originPos;
     private bool _isPlayerDamage;
+    #endregion
 
     // Start is called before the first frame update
     void Start()

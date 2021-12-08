@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HealthPowerup : Powerup
 {
+    #region Variables
     private int _live = 1;
+    #endregion
 
     protected override void Start()
     {

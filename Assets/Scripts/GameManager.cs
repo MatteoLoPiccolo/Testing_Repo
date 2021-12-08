@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour 
 {
+    #region Variables
     private static GameManager _instance;
     private bool _isGameOver;
+    #endregion
 
     public static GameManager Instance
     {

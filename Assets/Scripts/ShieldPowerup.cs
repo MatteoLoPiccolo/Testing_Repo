@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ShieldPowerup : Powerup
 {
+    #region Variables
     private Camera _cam;
+    #endregion
 
     protected override void Start()
     {
