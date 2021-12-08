@@ -27,7 +27,7 @@ public class UIManager : MonoBehaviour
         get
         {
             if (_instance == null)
-                Debug.Log("UI Manager is null");
+                Debug.LogError("UI Manager is null");
             return _instance;
         }
     }

@@ -100,13 +100,16 @@ public class Player : MonoBehaviour
         if (_currentAmmo >= 1)
         {
             _currentAmmo--;
-            UIManager.Instance.UpdateAmmoCount(_currentAmmo, _ammoCount);
+
+            OnAmmoUpdate?.Invoke(_currentAmmo, AmmoCount);
 
             if (_isTripleShotActive)
                 Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
             if (_isCannonActive)
                 _cannonPrefab.SetActive(true);
 
+            //GameObject laser = PoolManager.Instance.RequestLaser();
+            //laser.transform.position = transform.position + new Vector3(0, 1.05f, 0);
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
 
             _audioSource.clip = _laserClip;
@@ -209,7 +212,7 @@ public class Player : MonoBehaviour
         }
 
         _lives--;
-        UIManager.Instance.UpdateLives(_lives);
+        OnLiveUpdate?.Invoke(_lives);
         EngineDamageVisualization();
         _cam.CamPlayerDamage();
 

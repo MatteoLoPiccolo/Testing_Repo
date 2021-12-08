@@ -18,6 +18,16 @@ public class Laser : MonoBehaviour
             MoveDown();
     }
 
+    //private void OnEnable()
+    //{
+    //    Invoke("Hide", 1);
+    //}
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
     private void MoveUp()
     {
         transform.Translate(Vector3.up * _speed * Time.deltaTime);
@@ -26,9 +36,11 @@ public class Laser : MonoBehaviour
         {
             if (transform.parent != null)
             {
+                //Hide();
                 Destroy(transform.parent.gameObject);
             }
 
+            //Hide();
             Destroy(gameObject);
         }
     }
@@ -41,9 +53,11 @@ public class Laser : MonoBehaviour
         {
             if (transform.parent != null)
             {
+                //Hide();
                 Destroy(transform.parent.gameObject);
             }
 
+            //Hide();
             Destroy(gameObject);
         }
     }
